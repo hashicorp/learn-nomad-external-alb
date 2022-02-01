@@ -1,0 +1,3 @@
+.vagrant/
+aws.env/us-east/.terraform/
+.terraform
