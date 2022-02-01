@@ -43,7 +43,3 @@ Set the following for access from the Nomad CLI:
 CONFIGURATION
 
 }
-
-// output "servers_list" {
-//   value = module.hashistack.servers_list
-// }
