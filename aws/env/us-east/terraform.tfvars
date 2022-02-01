@@ -47,5 +47,5 @@ whitelist_ip = "0.0.0.0/0"
 # Token Accessor and Secret IDs used to create the Nomad server and client token for Consul auto-join
 # Must be a UUID - can be generated on linux with:
 # cat /proc/sys/kernel/random/uuid
-nomad_consul_token_id = "758387b0-76c0-427e-9a7e-de7aa545cb72"
-nomad_consul_token_secret = "5bc5be5c-f5bd-4192-922b-a2a1849dd2ff"
+# nomad_consul_token_id = ""
+# nomad_consul_token_secret = ""

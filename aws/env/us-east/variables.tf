@@ -61,10 +61,8 @@ variable "nomad_binary" {
 
 variable "nomad_consul_token_id" {
   description = "Accessor ID for the Consul ACL token used by Nomad servers and clients."
-  default     = "none"
 }
 
 variable "nomad_consul_token_secret" {
   description = "Secret ID for the Consul ACL token used by Nomad servers and clients."
-  default     = "none"
 }
