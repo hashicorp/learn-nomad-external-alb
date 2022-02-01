@@ -19,10 +19,12 @@ packer build packer.json
 `client_instance_type`  
 `client_count`
 
-3. Run `terraform apply` with token id and secret values to create the luster
+3. Run `terraform apply` with token id and secret values to create the cluster
 ```
 cd aws/env/us-east
-terraform apply -var="nomad_consul_token_id=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXXX" -var="nomad_consul_token_secret=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXXX"
+terraform apply \
+-var="nomad_consul_token_id=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXXX" \
+-var="nomad_consul_token_secret=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXXX"
 ```
 
 4. Run `post-setup.sh` to retrieve the Nomad ACL token from Consul KV (temporary).
