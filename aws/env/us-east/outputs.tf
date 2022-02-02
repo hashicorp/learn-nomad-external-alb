@@ -1,15 +1,10 @@
-output "server_public_ips" {
-  value = join("\n", module.hashistack.server_public_ips)
-}
-
-output "client_public_ips" {
-  value = join(",", module.hashistack.client_public_ips)
-}
-
 output "lb_address" {
   value = "http://${module.hashistack.server_lb_ip}"
 }
 
+output "consul_bootstrap_token_secret" {
+  value = var.nomad_consul_token_secret
+}
 output "IP_Addresses" {
   value = <<CONFIGURATION
 
