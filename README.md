@@ -32,7 +32,9 @@ terraform apply \
 ```
 ./post-setup.sh
 
+The Nomad user token has been saved locally to nomad.token and deleted from the Consul KV store
+
 Set the following environment variables to access your Nomad cluster with the user token created during setup:
 
 export NOMAD_ADDR=http://nomad-server-lb-XXXXXXXXXX.us-east-1.elb.amazonaws.com:4646
-export NOMAD_TOKEN=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXXX
+export NOMAD_TOKEN=$(cat nomad.token)
