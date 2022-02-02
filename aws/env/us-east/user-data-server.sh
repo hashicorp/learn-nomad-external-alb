@@ -24,12 +24,12 @@ if [ $? -eq 0 ]; then
     consul acl token create -accessor=${nomad_consul_token_id} -secret=${nomad_consul_token_secret} -description "Nomad server/client auto-join token" -role-name nomad-auto-join -token-file=$CONSUL_BOOTSTRAP_TOKEN
 
     # Wait for nomad servers to come up
-    sleep 20
+    sleep 30
 
     # Bootstrap nomad ACLs
     nomad acl bootstrap | grep -i secret | awk -F '=' '{print $2}' | xargs > $NOMAD_BOOTSTRAP_TOKEN
 
-    echo 'agent { policy = "read"} node { policy = "read" } namespace "*" { policy = "read" capabilities = ["list-jobs"] }' | nomad acl policy apply -token $(cat $NOMAD_BOOTSTRAP_TOKEN) -description "Policy to allow read of agents and nodes and listing of jobs in all namespaces." node-read-job-submit -
+    echo 'agent { policy = "read"} node { policy = "read" } namespace "*" { policy = "read" capabilities = ["submit-job", "read-logs"] }' | nomad acl policy apply -token $(cat $NOMAD_BOOTSTRAP_TOKEN) -description "Policy to allow read of agents and nodes and listing of jobs in all namespaces." node-read-job-submit -
 
     nomad acl token create -token $(cat $NOMAD_BOOTSTRAP_TOKEN) -name "read-token" -policy node-read-job-submit | grep -i secret | awk -F "=" '{print $2}' | xargs > $NOMAD_USER_TOKEN
 

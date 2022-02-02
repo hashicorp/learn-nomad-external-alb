@@ -76,6 +76,13 @@ resource "aws_security_group" "server_lb" {
     cidr_blocks = [var.whitelist_ip]
   }
 
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = [var.whitelist_ip]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -104,14 +111,6 @@ resource "aws_security_group" "primary" {
     security_groups = [aws_security_group.server_lb.id]
   }
 
-  # Fabio 
-  ingress {
-    from_port   = 9998
-    to_port     = 9999
-    protocol    = "tcp"
-    cidr_blocks = [var.whitelist_ip]
-  }
-
   # Consul
   ingress {
     from_port       = 8500
@@ -121,36 +120,31 @@ resource "aws_security_group" "primary" {
     security_groups = [aws_security_group.server_lb.id]
   }
 
-  # HDFS NameNode UI
   ingress {
-    from_port   = 50070
-    to_port     = 50070
-    protocol    = "tcp"
-    cidr_blocks = [var.whitelist_ip]
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    self      = true
   }
 
-  # HDFS DataNode UI
-  ingress {
-    from_port   = 50075
-    to_port     = 50075
-    protocol    = "tcp"
-    cidr_blocks = [var.whitelist_ip]
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
+}
 
-  # Spark history server UI
-  ingress {
-    from_port   = 18080
-    to_port     = 18080
-    protocol    = "tcp"
-    cidr_blocks = [var.whitelist_ip]
-  }
+resource "aws_security_group" "client_sg" {
+  name   = "nomad-clients"
+  vpc_id = data.aws_vpc.default.id
 
-  # Jupyter
+  # Nginx testing
   ingress {
-    from_port   = 8888
-    to_port     = 8888
-    protocol    = "tcp"
-    cidr_blocks = [var.whitelist_ip]
+    from_port       = 8080
+    to_port         = 8080
+    protocol        = "tcp"
+    cidr_blocks     = [var.whitelist_ip]
   }
 
   ingress {
@@ -236,7 +230,7 @@ resource "aws_instance" "client" {
   ami                    = var.ami
   instance_type          = var.client_instance_type
   key_name               = var.key_name
-  vpc_security_group_ids = [aws_security_group.primary.id]
+  vpc_security_group_ids = [aws_security_group.primary.id, aws_security_group.client_sg.id]
   count                  = var.client_count
   depends_on             = [aws_instance.server]
 
@@ -335,6 +329,10 @@ output "server_public_ips" {
 
 output "client_public_ips" {
   value = aws_instance.client[*].public_ip
+}
+
+output "nomad_clients" {
+  value = aws_instance.client[*]
 }
 
 output "server_lb_ip" {
