@@ -250,7 +250,6 @@ resource "aws_instance" "client" {
   ami                    = var.ami
   instance_type          = var.client_instance_type
   key_name               = var.key_name
-  # TODO: Remove primary sg (not necessary)
   vpc_security_group_ids = [aws_security_group.primary.id, aws_security_group.client_sg.id]
   count                  = var.client_count
   depends_on             = [aws_instance.server]
