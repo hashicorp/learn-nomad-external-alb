@@ -76,13 +76,6 @@ resource "aws_security_group" "server_lb" {
     cidr_blocks = [var.whitelist_ip]
   }
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [var.whitelist_ip]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -135,16 +128,43 @@ resource "aws_security_group" "primary" {
   }
 }
 
+resource "aws_security_group" "clients_ingress_sg" {
+  name   = "nomad-clients-ingress"
+  vpc_id = data.aws_vpc.default.id
+
+  # Nginx external
+  ingress {
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    self      = true
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_security_group" "client_sg" {
   name   = "nomad-clients"
   vpc_id = data.aws_vpc.default.id
 
-  # Nginx testing
+  # Nginx access to demo webapp
   ingress {
     from_port       = 8080
     to_port         = 8080
     protocol        = "tcp"
-    cidr_blocks     = [var.whitelist_ip]
+    security_groups = [aws_security_group.clients_ingress_sg.id]
   }
 
   ingress {
@@ -230,6 +250,7 @@ resource "aws_instance" "client" {
   ami                    = var.ami
   instance_type          = var.client_instance_type
   key_name               = var.key_name
+  # TODO: Remove primary sg (not necessary)
   vpc_security_group_ids = [aws_security_group.primary.id, aws_security_group.client_sg.id]
   count                  = var.client_count
   depends_on             = [aws_instance.server]
@@ -343,6 +364,6 @@ output "servers_list" {
   value = aws_instance.server[*]
 }
 
-output "sec_group_server_lb" {
-  value = aws_security_group.server_lb
+output "clients_ingress_sg" {
+  value = aws_security_group.clients_ingress_sg
 }

@@ -2,18 +2,18 @@ data "aws_vpc" "default" {
   default = true
 }
 
-resource "aws_lb" "nomad_ingress" {
+resource "aws_lb" "nomad_clients_ingress" {
   name               = "nomad-ingress-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [module.hashistack.sec_group_server_lb.id]
+  security_groups    = [module.hashistack.clients_ingress_sg.id]
 //   subnets            = [for subnet in aws_subnet.public : subnet.id]
 # TODO: Get subnets somehow...
   subnets            = ["subnet-632ae242","subnet-b9a13cf4"]
 }
 
 resource "aws_lb_listener" "nomad_listener" {
-  load_balancer_arn = aws_lb.nomad_ingress.id
+  load_balancer_arn = aws_lb.nomad_clients_ingress.id
   port              = 80
 
   default_action {
@@ -46,5 +46,5 @@ resource "aws_lb_target_group_attachment" "nomad_clients" {
 }
 
 output "alb_address" {
-    value = "http://${aws_lb.nomad_ingress.dns_name}"
+    value = "http://${aws_lb.nomad_clients_ingress.dns_name}:80"
 }
