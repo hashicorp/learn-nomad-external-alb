@@ -2,14 +2,16 @@ data "aws_vpc" "default" {
   default = true
 }
 
+data "aws_subnet_ids" "default_subnets" {
+    vpc_id = data.aws_vpc.default.id
+}
+
 resource "aws_lb" "nomad_clients_ingress" {
   name               = "nomad-ingress-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [module.hashistack.clients_ingress_sg.id]
-//   subnets            = [for subnet in aws_subnet.public : subnet.id]
-# TODO: Get subnets somehow...
-  subnets            = ["subnet-632ae242","subnet-b9a13cf4"]
+  subnets            = data.aws_subnet_ids.default_subnets.ids
 }
 
 resource "aws_lb_listener" "nomad_listener" {
@@ -38,11 +40,10 @@ resource "aws_lb_target_group" "nomad_clients" {
 }
 
 resource "aws_lb_target_group_attachment" "nomad_clients" {
+  count = var.client_count
   target_group_arn = aws_lb_target_group.nomad_clients.arn
-  # TODO: Update target to iterate over list
-  target_id        = module.hashistack.nomad_clients[0].id
+  target_id = element(split(",", module.hashistack.nomad_clients_ids), count.index)
   port             = 8080
-//   count            = var.client_count
 }
 
 output "alb_address" {

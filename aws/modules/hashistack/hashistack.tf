@@ -356,6 +356,10 @@ output "nomad_clients" {
   value = aws_instance.client[*]
 }
 
+output "nomad_clients_ids" {
+  value = join(",", aws_instance.client.*.id)
+}
+
 output "server_lb_ip" {
   value = aws_elb.server_lb.dns_name
 }
