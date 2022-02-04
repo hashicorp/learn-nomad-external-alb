@@ -2,7 +2,7 @@ job "nginx" {
   datacenters = ["dc1"]
 
   group "nginx" {
-    count = 3
+    count = 1
 
     network {
       port "http" {
