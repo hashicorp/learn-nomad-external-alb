@@ -1,8 +1,16 @@
 job "demo-webapp" {
   datacenters = ["dc1"]
 
+  # Run only on nodes with "targetted" in the 
+  # instance metadata name
+  constraint {
+    attribute = "${meta.node-name}"
+    operator = "regexp"
+    value = "targetted"
+  }
+
   group "demo" {
-    count = 3
+    count = 2
     network {
       port "http" {
         to = -1

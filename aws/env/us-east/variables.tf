@@ -24,6 +24,16 @@ variable "client_instance_type" {
   default     = "t2.medium"
 }
 
+variable "targetted_client_instance_type" {
+  description = "The AWS instance type to use for targetted clients."
+  default     = "t2.medium"
+}
+
+variable "targetted_client_count" {
+  description = "The number of targetted clients to provision."
+  default     = "4"
+}
+
 variable "root_block_device_size" {
   description = "The volume size of the root block device."
   default     = 16

@@ -10,6 +10,8 @@ output "IP_Addresses" {
 
 Client public IPs: ${join(", ", module.hashistack.client_public_ips)}
 
+Targetted client public IPs: ${join(", ", module.hashistack.targetted_client_public_ips)}
+
 Server public IPs: ${join(", ", module.hashistack.server_public_ips)}
 
 To connect, add your private key and SSH into any client or server with

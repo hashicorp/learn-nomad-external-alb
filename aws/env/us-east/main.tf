@@ -10,6 +10,8 @@ module "hashistack" {
   ami                    = var.ami
   server_instance_type   = var.server_instance_type
   client_instance_type   = var.client_instance_type
+  targetted_client_instance_type = var.targetted_client_instance_type
+  targetted_client_count = var.targetted_client_count
   key_name               = var.key_name
   server_count           = var.server_count
   client_count           = var.client_count

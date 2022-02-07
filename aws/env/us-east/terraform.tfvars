@@ -34,7 +34,7 @@ region = "us-east-1"
 
 # Image built with ../../packer.json
 # Available in us-east-1
-ami = "ami-0f94b0bb41395fffc"
+ami = "ami-0655cde106585d16e"
 
 # These options control instance size and count. 
 # They should be set according to your needs.
@@ -42,6 +42,8 @@ server_instance_type = "t2.medium"
 server_count         = "3"
 client_instance_type = "t2.micro"
 client_count         = "3"
+targetted_client_instance_type = "t2.micro"
+targetted_client_count         = "2"
 
 # `whitelist_ip` (required) - IP to whitelist for the
 # security groups (set to 0.0.0.0/0 for world).  
