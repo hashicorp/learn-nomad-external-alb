@@ -37,6 +37,12 @@ variable "root_block_device_size" {
 variable "whitelist_ip" {
 }
 
+variable "targetted_client_instance_type" {
+}
+
+variable "targetted_client_count" {
+}
+
 variable "retry_join" {
   type = map(string)
 
@@ -244,6 +250,11 @@ resource "aws_instance" "server" {
 
   user_data            = data.template_file.user_data_server.rendered
   iam_instance_profile = aws_iam_instance_profile.instance_profile.name
+
+  metadata_options {
+    http_endpoint = "enabled"
+    instance_metadata_tags = "enabled"
+  }
 }
 
 resource "aws_instance" "client" {
@@ -279,6 +290,51 @@ resource "aws_instance" "client" {
 
   user_data            = data.template_file.user_data_client.rendered
   iam_instance_profile = aws_iam_instance_profile.instance_profile.name
+
+  metadata_options {
+    http_endpoint = "enabled"
+    instance_metadata_tags = "enabled"
+  }
+}
+
+resource "aws_instance" "targetted_client" {
+  ami                    = var.ami
+  instance_type          = var.targetted_client_instance_type
+  key_name               = var.key_name
+  vpc_security_group_ids = [aws_security_group.primary.id, aws_security_group.client_sg.id]
+  count                  = var.targetted_client_count
+  depends_on             = [aws_instance.server]
+
+  # instance tags
+  tags = merge(
+    {
+      "Name" = "${var.name}-targetted-client-${count.index}"
+    },
+    {
+      "${var.retry_join.tag_key}" = "${var.retry_join.tag_value}"
+    },
+  )
+
+  root_block_device {
+    volume_type           = "gp2"
+    volume_size           = var.root_block_device_size
+    delete_on_termination = "true"
+  }
+
+  ebs_block_device {
+    device_name           = "/dev/xvdd"
+    volume_type           = "gp2"
+    volume_size           = "50"
+    delete_on_termination = "true"
+  }
+
+  user_data            = data.template_file.user_data_client.rendered
+  iam_instance_profile = aws_iam_instance_profile.instance_profile.name
+
+  metadata_options {
+    http_endpoint = "enabled"
+    instance_metadata_tags = "enabled"
+  }
 }
 
 resource "aws_iam_instance_profile" "instance_profile" {
@@ -357,6 +413,14 @@ output "nomad_clients" {
 
 output "nomad_clients_ids" {
   value = join(",", aws_instance.client.*.id)
+}
+
+output "targetted_client_public_ips" {
+  value = aws_instance.targetted_client[*].public_ip
+}
+
+output "targetted_nomad_clients_ids" {
+  value = join(",", aws_instance.targetted_client.*.id)
 }
 
 output "server_lb_ip" {

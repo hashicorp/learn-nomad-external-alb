@@ -8,6 +8,9 @@ client {
     "driver.raw_exec.enable"    = "1"
     "docker.privileged.enabled" = "true"
   }
+  meta {
+    node-name = "SERVER_NAME"
+  }
 }
 
 acl {
