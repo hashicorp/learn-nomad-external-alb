@@ -3,11 +3,11 @@ job "demo-webapp" {
 
   # Run only on nodes with "targetted" in the 
   # instance metadata name
-  constraint {
-    attribute = "${meta.node-name}"
-    operator = "regexp"
-    value = "targetted"
-  }
+  // constraint {
+  //   attribute = "${meta.node-name}"
+  //   operator = "regexp"
+  //   value = "targetted"
+  // }
 
   group "demo" {
     count = 2
