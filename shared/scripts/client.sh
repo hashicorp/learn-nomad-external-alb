@@ -26,9 +26,9 @@ fi
 # IP_ADDRESS="$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')"
 
 # Consul
-sed -i "s/IP_ADDRESS/$IP_ADDRESS/g" $CONFIGDIR/consul_client.json
-sed -i "s/RETRY_JOIN/$RETRY_JOIN/g" $CONFIGDIR/consul_client.json
-sudo cp $CONFIGDIR/consul_client.json $CONSULCONFIGDIR/consul.json
+sed -i "s/IP_ADDRESS/$IP_ADDRESS/g" $CONFIGDIR/consul_client.hcl
+sed -i "s/RETRY_JOIN/$RETRY_JOIN/g" $CONFIGDIR/consul_client.hcl
+sudo cp $CONFIGDIR/consul_client.hcl $CONSULCONFIGDIR/consul.hcl
 sudo cp $CONFIGDIR/consul_$CLOUD.service /etc/systemd/system/consul.service
 
 sudo systemctl enable consul.service
@@ -65,11 +65,6 @@ echo "127.0.0.1 $(hostname)" | sudo tee --append /etc/hosts
 echo "nameserver $DOCKER_BRIDGE_IP_ADDRESS" | sudo tee /etc/resolv.conf.new
 cat /etc/resolv.conf | sudo tee --append /etc/resolv.conf.new
 sudo mv /etc/resolv.conf.new /etc/resolv.conf
-
-# Move examples directory to $HOME
-sudo mv /ops/examples /home/$HOME_DIR
-sudo chown -R $HOME_DIR:$HOME_DIR /home/$HOME_DIR/examples
-sudo chmod -R 775 /home/$HOME_DIR/examples
 
 # Set env vars for tool CLIs
 echo "export VAULT_ADDR=http://$IP_ADDRESS:8200" | sudo tee --append /home/$HOME_DIR/.bashrc

@@ -10,3 +10,4 @@ gcp/
 Vagrantfile
 ignore*
 nomad.token
+*.pem
