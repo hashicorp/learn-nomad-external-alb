@@ -34,7 +34,8 @@ region = "us-east-1"
 
 # Image built with ../../packer.json
 # Available in us-east-1
-ami = "ami-00ce419c609dde9d1"
+# includes consul 1.11.2 and nomad 1.2.5
+ami = "ami-0a02077aac42adb11"
 
 # These options control instance size and count. 
 # They should be set according to your needs.
