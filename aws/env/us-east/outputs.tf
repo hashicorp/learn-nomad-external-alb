@@ -2,6 +2,10 @@ output "lb_address_consul_nomad" {
   value = "http://${aws_elb.server_lb.dns_name}"
 }
 
+output "consul_bootstrap_token_secret" {
+  value = var.nomad_consul_token_secret
+}
+
 output "IP_Addresses" {
   value = <<CONFIGURATION
 
