@@ -37,10 +37,10 @@ variable "root_block_device_size" {
 variable "whitelist_ip" {
 }
 
-variable "targetted_client_instance_type" {
+variable "targeted_client_instance_type" {
 }
 
-variable "targetted_client_count" {
+variable "targeted_client_count" {
 }
 
 variable "retry_join" {
@@ -297,18 +297,18 @@ resource "aws_instance" "client" {
   }
 }
 
-resource "aws_instance" "targetted_client" {
+resource "aws_instance" "targeted_client" {
   ami                    = var.ami
-  instance_type          = var.targetted_client_instance_type
+  instance_type          = var.targeted_client_instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.primary.id, aws_security_group.client_sg.id]
-  count                  = var.targetted_client_count
+  count                  = var.targeted_client_count
   depends_on             = [aws_instance.server]
 
   # instance tags
   tags = merge(
     {
-      "Name" = "${var.name}-targetted-client-${count.index}"
+      "Name" = "${var.name}-targeted-client-${count.index}"
     },
     {
       "${var.retry_join.tag_key}" = "${var.retry_join.tag_value}"
@@ -415,12 +415,12 @@ output "nomad_clients_ids" {
   value = join(",", aws_instance.client.*.id)
 }
 
-output "targetted_client_public_ips" {
-  value = aws_instance.targetted_client[*].public_ip
+output "targeted_client_public_ips" {
+  value = aws_instance.targeted_client[*].public_ip
 }
 
-output "targetted_nomad_clients_ids" {
-  value = join(",", aws_instance.targetted_client.*.id)
+output "targeted_nomad_clients_ids" {
+  value = join(",", aws_instance.targeted_client.*.id)
 }
 
 output "server_lb_ip" {

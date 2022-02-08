@@ -43,8 +43,8 @@ resource "aws_lb_target_group_attachment" "nomad_clients" {
   count = var.client_count
   target_group_arn = aws_lb_target_group.nomad_clients.arn
   target_id = element(split(",", module.hashistack.nomad_clients_ids), count.index)
-  # Assign only targetted clients to ALB
-//   target_id = element(split(",", module.hashistack.targetted_nomad_clients_ids), count.index)
+  # Assign only targeted clients to ALB
+  // target_id = element(split(",", module.hashistack.targeted_nomad_clients_ids), count.index)
   port             = 8080
 }
 

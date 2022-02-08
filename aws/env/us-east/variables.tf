@@ -24,13 +24,13 @@ variable "client_instance_type" {
   default     = "t2.medium"
 }
 
-variable "targetted_client_instance_type" {
-  description = "The AWS instance type to use for targetted clients."
+variable "targeted_client_instance_type" {
+  description = "The AWS instance type to use for targeted clients."
   default     = "t2.medium"
 }
 
-variable "targetted_client_count" {
-  description = "The number of targetted clients to provision."
+variable "targeted_client_count" {
+  description = "The number of targeted clients to provision."
   default     = "4"
 }
 

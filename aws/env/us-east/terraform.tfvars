@@ -43,8 +43,8 @@ server_instance_type = "t2.medium"
 server_count         = "3"
 client_instance_type = "t2.micro"
 client_count         = "3"
-targetted_client_instance_type = "t2.micro"
-targetted_client_count         = "2"
+targeted_client_instance_type = "t2.micro"
+targeted_client_count         = "2"
 
 # `whitelist_ip` (required) - IP to whitelist for the
 # security groups (set to 0.0.0.0/0 for world).  
