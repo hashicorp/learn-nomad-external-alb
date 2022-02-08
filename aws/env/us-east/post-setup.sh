@@ -4,7 +4,7 @@ NOMAD_USER_TOKEN_FILENAME="nomad.token"
 
 # Get secret from tfvars file
 TOKEN_SECRET=$(grep nomad_consul_token_secret terraform.tfvars | awk -F '"' '{print $2}')
-LB_ADDRESS=$(terraform output -raw lb_address)
+LB_ADDRESS=$(terraform output -raw lb_address_consul_nomad)
 CONSUL_BOOTSTRAP_TOKEN=$(terraform output -raw consul_bootstrap_token_secret)
 
 # Get nomad user token from consul kv

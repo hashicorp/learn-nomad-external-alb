@@ -1,5 +1,9 @@
 job "nginx" {
   datacenters = ["dc1"]
+  
+  constraint {
+    distinct_hosts = true
+  }
 
   group "nginx" {
     count = 1
