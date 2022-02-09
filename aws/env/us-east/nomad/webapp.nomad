@@ -1,18 +1,6 @@
 job "demo-webapp" {
   datacenters = ["dc1","dc2"]
 
-  # Run only on nodes with "targeted" in the 
-  # instance metadata name
-  // constraint {
-  //   attribute = "${meta.node-name}"
-  //   operator = "regexp"
-  //   value = "targeted"
-  // }
-
-  // constraint {
-  //   distinct_hosts = true
-  // }
-
   group "dc1-demo" {
     constraint {
       attribute = "${node.datacenter}"
