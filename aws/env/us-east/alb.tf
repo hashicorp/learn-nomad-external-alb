@@ -51,20 +51,20 @@ resource "aws_lb_target_group_attachment" "nomad_clients" {
   port             = 8080
 }
 
-resource "aws_lb_listener_rule" "nomad_clients" {
-  listener_arn = aws_lb_listener.nomad_listener.arn
+// resource "aws_lb_listener_rule" "nomad_clients" {
+//   listener_arn = aws_lb_listener.nomad_listener.arn
 
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.nomad_clients.arn
-  }
+//   action {
+//     type             = "forward"
+//     target_group_arn = aws_lb_target_group.nomad_clients.arn
+//   }
 
-  condition {
-    path_pattern {
-      values = ["/dc1"]
-    }
-  }
-}
+//   condition {
+//     path_pattern {
+//       values = ["/dc1"]
+//     }
+//   }
+// }
 
 # nomad clients in dc2
 resource "aws_lb_target_group" "nomad_clients_targeted" {
@@ -89,20 +89,20 @@ resource "aws_lb_target_group_attachment" "nomad_clients_targeted" {
   port             = 8080
 }
 
-resource "aws_lb_listener_rule" "nomad_clients_targeted" {
-  listener_arn = aws_lb_listener.nomad_listener.arn
+// resource "aws_lb_listener_rule" "nomad_clients_targeted" {
+//   listener_arn = aws_lb_listener.nomad_listener.arn
 
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.nomad_clients_targeted.arn
-  }
+//   action {
+//     type             = "forward"
+//     target_group_arn = aws_lb_target_group.nomad_clients_targeted.arn
+//   }
 
-  condition {
-    path_pattern {
-      values = ["/dc2"]
-    }
-  }
-}
+//   condition {
+//     path_pattern {
+//       values = ["/dc2"]
+//     }
+//   }
+// }
 
 output "alb_address" {
     value = "http://${aws_lb.nomad_clients_ingress.dns_name}:80"

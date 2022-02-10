@@ -5,6 +5,7 @@ set -e
 exec > >(sudo tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 sudo bash /ops/shared/scripts/server.sh "aws" "${server_count}" "${retry_join}" "${nomad_binary}"
 
+ACL_DIRECTORY="/ops/shared/config"
 CONSUL_BOOTSTRAP_TOKEN="/tmp/consul_bootstrap"
 NOMAD_BOOTSTRAP_TOKEN="/tmp/nomad_bootstrap"
 NOMAD_USER_TOKEN="/tmp/nomad_user_token"
@@ -17,7 +18,7 @@ sudo systemctl restart nomad
 consul acl bootstrap | grep -i secretid | awk '{print $2}' > $CONSUL_BOOTSTRAP_TOKEN
 
 if [ $? -eq 0 ]; then
-    consul acl policy create -name 'nomad-auto-join' -rules 'acl = "write" agent_prefix "" {policy = "write"} event_prefix "" {policy = "write"} key_prefix "" {policy = "write"} node_prefix "" {policy = "write"} query_prefix "" {policy = "write"} service_prefix "" {policy = "write"}' -token-file=$CONSUL_BOOTSTRAP_TOKEN
+    consul acl policy create -name 'nomad-auto-join' -rules="@$ACL_DIRECTORY/consul-acl-nomad-auto-join.hcl" -token-file=$CONSUL_BOOTSTRAP_TOKEN
 
     consul acl role create -name "nomad-auto-join" -description "Role with policies necessary for nomad servers and clients to auto-join via Consul." -policy-name "nomad-auto-join" -token-file=$CONSUL_BOOTSTRAP_TOKEN
 
@@ -29,7 +30,7 @@ if [ $? -eq 0 ]; then
     # Bootstrap nomad ACLs
     nomad acl bootstrap | grep -i secret | awk -F '=' '{print $2}' | xargs > $NOMAD_BOOTSTRAP_TOKEN
 
-    echo 'agent { policy = "read"} node { policy = "read" } namespace "*" { policy = "read" capabilities = ["submit-job", "read-logs"] }' | nomad acl policy apply -token $(cat $NOMAD_BOOTSTRAP_TOKEN) -description "Policy to allow read of agents and nodes and listing of jobs in all namespaces." node-read-job-submit -
+    nomad acl policy apply -token $(cat $NOMAD_BOOTSTRAP_TOKEN) -description "Policy to allow reading of agents and nodes and listing and submitting jobs in all namespaces." node-read-job-submit $ACL_DIRECTORY/nomad-acl-user.hcl
 
     nomad acl token create -token $(cat $NOMAD_BOOTSTRAP_TOKEN) -name "read-token" -policy node-read-job-submit | grep -i secret | awk -F "=" '{print $2}' | xargs > $NOMAD_USER_TOKEN
 

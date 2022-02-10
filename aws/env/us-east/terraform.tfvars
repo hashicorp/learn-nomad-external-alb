@@ -25,8 +25,7 @@ region = "us-east-1"
 # for this environment to build properly.
 
 # Image built with ../../packer.json
-# Available in us-east-1
-ami = "ami-0a02077aac42adb11"
+ami = "ami-016644c17d7b06f34"
 
 # These options control instance size and count. 
 # They should be set according to your needs.
