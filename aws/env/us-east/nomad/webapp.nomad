@@ -1,11 +1,11 @@
 job "demo-webapp" {
   datacenters = ["dc1","dc2"]
 
-  group "dc1-demo" {
+  group "api-demo" {
     constraint {
-      attribute = "${node.datacenter}"
+      attribute = "${meta.service-client}"
       operator  = "="
-      value     = "dc1"
+      value     = "api"
     }
     count = 3
     network {
@@ -15,7 +15,7 @@ job "demo-webapp" {
     }
 
     service {
-      name = "demo-webapp-dc1"
+      name = "api-service"
       port = "http"
 
       check {
@@ -40,11 +40,11 @@ job "demo-webapp" {
       }
     }
   }
-  group "dc2-demo" {
+  group "payments-demo" {
     constraint {
-      attribute = "${node.datacenter}"
+      attribute = "${meta.service-client}"
       operator  = "="
-      value     = "dc2"
+      value     = "payments"
     }
     count = 2
     network {
@@ -54,7 +54,7 @@ job "demo-webapp" {
     }
 
     service {
-      name = "demo-webapp-dc2"
+      name = "payments-service"
       port = "http"
 
       check {

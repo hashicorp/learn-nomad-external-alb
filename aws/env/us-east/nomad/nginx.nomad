@@ -1,11 +1,11 @@
 job "nginx" {
   datacenters = ["dc1", "dc2"]
 
-  group "nginx-dc1" {
+  group "nginx-api" {
     constraint {
-      attribute = "${node.datacenter}"
+      attribute = "${meta.service-client}"
       operator  = "="
-      value     = "dc1"
+      value     = "api"
     }
     count = 1
 
@@ -16,7 +16,7 @@ job "nginx" {
     }
 
     service {
-      name = "nginx-dc1"
+      name = "nginx-api"
       port = "http"
     }
 
@@ -36,7 +36,7 @@ job "nginx" {
       template {
         data = <<EOF
 upstream backend {
-{{ range service "demo-webapp-dc1" }}
+{{ range service "api-service" }}
   server {{ .Address }}:{{ .Port }};
 {{ else }}server 127.0.0.1:65535; # force a 502
 {{ end }}
@@ -57,11 +57,11 @@ EOF
       }
     }
   }
-  group "nginx-dc2" {
+  group "nginx-payments" {
     constraint {
-      attribute = "${node.datacenter}"
+      attribute = "${meta.service-client}"
       operator  = "="
-      value     = "dc2"
+      value     = "payments"
     }
     count = 1
 
@@ -72,7 +72,7 @@ EOF
     }
 
     service {
-      name = "nginx-dc2"
+      name = "nginx-payments"
       port = "http"
     }
 
@@ -92,7 +92,7 @@ EOF
       template {
         data = <<EOF
 upstream backend {
-{{ range service "demo-webapp-dc2" }}
+{{ range service "payments-service" }}
   server {{ .Address }}:{{ .Port }};
 {{ else }}server 127.0.0.1:65535; # force a 502
 {{ end }}

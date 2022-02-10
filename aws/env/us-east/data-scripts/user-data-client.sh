@@ -15,10 +15,13 @@ AWS_SERVER_TAG_NAME=$(curl http://169.254.169.254/latest/meta-data/tags/instance
 sed -i "s/SERVER_NAME/$AWS_SERVER_TAG_NAME/g" $NOMAD_HCL_PATH
 
 # Put targeted nodes in a different datacenter
+# and add service_client meta tag
 if [[ $AWS_SERVER_TAG_NAME =~ "targeted" ]]; then
-    echo 'datacenter = "dc2"' >> $NOMAD_HCL_PATH
+    sed -i "s/DATACENTER/dc2/g" $NOMAD_HCL_PATH
+    sed -i "s/SERVICE_CLIENT/payments/g" $NOMAD_HCL_PATH
 else
-    echo 'datacenter = "dc1"' >> $NOMAD_HCL_PATH
+    sed -i "s/DATACENTER/dc1/g" $NOMAD_HCL_PATH
+    sed -i "s/SERVICE_CLIENT/api/g" $NOMAD_HCL_PATH
 fi
 
 sudo systemctl restart nomad

@@ -1,5 +1,6 @@
 data_dir  = "/opt/nomad/data"
 bind_addr = "0.0.0.0"
+datacenter = "DATACENTER"
 
 # Enable the client
 client {
@@ -10,6 +11,7 @@ client {
   }
   meta {
     node-name = "SERVER_NAME"
+    service-client = "SERVICE_CLIENT"
   }
 }
 
