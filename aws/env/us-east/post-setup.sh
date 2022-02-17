@@ -20,7 +20,7 @@ if [ ! -f $NOMAD_USER_TOKEN_FILENAME ]; then
 
         echo -e "\nSet the following environment variables to access your Nomad cluster with the user token created during setup:\n\nexport NOMAD_ADDR=${LB_ADDRESS}:4646\nexport NOMAD_TOKEN=\$(cat $NOMAD_USER_TOKEN_FILENAME)\n"
     else
-        echo -e "\nSomething went wrong when retrieving the token from the Consul KV store - check the nomad.token file. \n\nNOT deleting token from KV."
+        echo -e "\nSomething went wrong when retrieving the token from the Consul KV store.\nCheck the nomad.token file or wait a bit and then try running the script again.\n\nNOT deleting token from KV."
     fi
     
 else 
