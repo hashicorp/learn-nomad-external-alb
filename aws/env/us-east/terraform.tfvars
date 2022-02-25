@@ -8,7 +8,7 @@ name = "nomad"
 
 # `key_name` (required) -  The name of the AWS SSH
 # keys to be loaded on the instance at provisioning.  
-key_name = "arusso-us-east-1"
+key_name = "YOUR_KEY_NAME"
 
 # `nomad_binary` (optional, null) - URL of a zip file 
 # containing a nomad executable with which to replace
@@ -25,7 +25,7 @@ region = "us-east-1"
 # for this environment to build properly.
 
 # Image built with ../../packer.json
-ami = "ami-0445eeea5e1406960"
+ami = "AMI_ID_FROM_PACKER_BUILD"
 
 # These options control instance size and count. 
 # They should be set according to your needs.
