@@ -20,6 +20,12 @@ source "amazon-ebs" "hashistack" {
   region        = "us-east-1"
   source_ami    = "${data.amazon-ami.hashistack.id}"
   ssh_username  = "ubuntu"
+  tags = {
+    Name        = "nomad-alb"
+  }
+  snapshot_tags = {
+    Name        = "nomad-alb"
+  }
 }
 
 build {
