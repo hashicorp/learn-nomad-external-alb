@@ -19,6 +19,9 @@ if [ ! -f $NOMAD_USER_TOKEN_FILENAME ]; then
         echo -e "\nThe Nomad user token has been saved locally to $NOMAD_USER_TOKEN_FILENAME and deleted from the Consul KV store."
 
         echo -e "\nSet the following environment variables to access your Nomad cluster with the user token created during setup:\n\nexport NOMAD_ADDR=\$(terraform output -raw lb_address_consul_nomad):4646\nexport NOMAD_TOKEN=\$(cat $NOMAD_USER_TOKEN_FILENAME)\n"
+
+        echo -e "\nThe Nomad UI can be accessed at ${LB_ADDRESS}:4646/ui\nwith the bootstrap token: $(cat $NOMAD_USER_TOKEN_FILENAME)"
+        
     else
         echo -e "\nSomething went wrong when retrieving the token from the Consul KV store.\nCheck the nomad.token file or wait a bit and then try running the script again.\n\nNOT deleting token from KV."
     fi
