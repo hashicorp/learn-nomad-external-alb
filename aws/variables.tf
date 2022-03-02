@@ -31,7 +31,7 @@ variable "targeted_client_instance_type" {
 
 variable "targeted_client_count" {
   description = "The number of targeted clients to provision."
-  default     = "4"
+  default     = "2"
 }
 
 variable "root_block_device_size" {
@@ -50,7 +50,7 @@ variable "server_count" {
 
 variable "client_count" {
   description = "The number of clients to provision."
-  default     = "4"
+  default     = "3"
 }
 
 variable "retry_join" {
