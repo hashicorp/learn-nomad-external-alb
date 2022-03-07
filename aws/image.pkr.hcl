@@ -20,11 +20,23 @@ source "amazon-ebs" "hashistack" {
   region        = "us-east-1"
   source_ami    = "${data.amazon-ami.hashistack.id}"
   ssh_username  = "ubuntu"
+  force_deregister = true
+  force_delete_snapshot = true
+  
   tags = {
     Name        = "nomad-alb"
+    source = "hashicorp/learn"
+    purpose = "demo"
+    OS_Version = "Ubuntu"
+    Release = "Latest"
+    Base_AMI_ID = "{{ .SourceAMI }}"
+    Base_AMI_Name = "{{ .SourceAMIName }}
   }
+  
   snapshot_tags = {
     Name        = "nomad-alb"
+    source = "hashicorp/learn"
+    purpose = "demo"
   }
 }
 
