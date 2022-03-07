@@ -30,7 +30,7 @@ source "amazon-ebs" "hashistack" {
     OS_Version = "Ubuntu"
     Release = "Latest"
     Base_AMI_ID = "{{ .SourceAMI }}"
-    Base_AMI_Name = "{{ .SourceAMIName }}
+    Base_AMI_Name = "{{ .SourceAMIName }}"
   }
   
   snapshot_tags = {
