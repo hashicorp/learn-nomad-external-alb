@@ -31,7 +31,7 @@ ami = "AMI_ID_FROM_PACKER_BUILD"
 
 # These options control instance size and count. 
 # They should be set according to your needs.
-server_instance_type            = "t2.medium"
+server_instance_type            = "t2.micro"
 server_count                    = "3"
 client_instance_type            = "t2.micro"
 client_count                    = "3"
